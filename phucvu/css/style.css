@@ -1,0 +1,201 @@
+*{
+	margin: 0;
+	padding: 0;
+}
+body{
+	margin: 0;
+	padding: 0;
+	font-size: 12px;
+	font-family: Arial;
+	background: #C88E42;
+}
+button{
+	background: #f6f6f6;
+	border-radius: 5px;
+	font-size: 15px;
+	font-weight: bold;
+}
+.wrapper{
+	margin: 10px auto;
+	padding: 0;
+	width: 100%;
+	max-width: 601px;
+}
+.bgsite{
+	float: left;
+	width: 100%;
+	max-width: 600px;
+	background: #46D6EB;
+	border: 1px solid #000;
+}
+.page1{
+	width: 100%;
+	max-width: 590px;
+	padding: 5px;
+	margin: 0;
+}
+.page1 select{
+	margin: 0;
+	padding: 5px 0;
+	width: 100%;
+	max-width: 590px;
+	height: 30px;
+}
+.page1 select option{
+	margin: 0;
+	padding: 10px 0;
+}
+.page1 .dsban{
+	margin: 5px 0;
+	padding: 0;
+	width: 100%;
+	max-width: 590px;
+	text-align: center;
+}
+.nutbam{
+	float: left;
+	margin: 3px;
+	padding: 0;
+	width: 33vw;
+	max-width: 190px;
+	height: 33vw;
+	max-height: 190px;
+	font-size: 50px;
+	background: #f6f6f6;
+	border: 1px solid #000;
+	font-weight: normal;
+}
+.invisible{
+	display: none;
+}
+.page2{
+	display: none;
+}
+
+.page2{
+	width: 100%;
+	max-width: 590px;
+	padding: 0;
+	margin: 0;
+}
+.page2 .nav{
+	width: 100%;
+	max-width: 590px;
+	background: #FFF;
+	padding: 5px;
+	float: left;
+}
+.page2 .nav button{
+	border: 1px solid #000;
+}
+.page2 .nav #traban{
+	width: 20%;
+	float: left;
+	margin: 0;
+	padding: 10px 0;
+	font-size: 16px;
+}
+.page2 .nav span#tenban{
+	float: left;
+	width: 50%;
+	text-align: center;
+	margin: 0;
+	padding: 0;
+	font-size: 37px;
+	color: red;
+	font-weight: bold;
+}
+.page2 .nav #xemdsban{
+	float: left;
+	width: 30%;
+	padding: 10px 0;
+	margin: 0;
+	font-size: 16px;
+}
+
+.clearboth{
+	clear: both;
+}
+
+
+.page2 .dsdatmon{
+	width: 100%;
+	max-width: 590px;
+	margin: 0;
+	padding: 5px;
+}
+.page2 .dsdatmon table#dsmon{
+	background: #FFF;
+	width: 100%;
+	font-size: 16px;
+	margin: 1% 0;
+	padding: 0;
+}
+.page2 .dsdatmon table#dsmon tr{
+	text-align: center;
+	margin: 0;
+	padding: 0;
+}
+.page2 .dsdatmon table#dsmon tr.tieude{
+	font-weight: bold;
+}
+td.tenmon, td.tinhtrang{
+	text-align: left;
+	margin: 0;
+	padding: 0;
+}
+.page2 .dsdatmon table#dsmon tr td{
+	margin: 0;
+	padding: 5px;
+}
+.page2 .dsdatmon table#dsmon tr td button{
+	border: 1px solid #000;
+	padding: 0 20px;
+	height: 40px;
+	width: 99%;
+	margin: 0 1%;
+}
+
+.page2 .datmon{
+	width: 100%;
+	max-width: 590px;
+	background: #FFF;
+	float: left;
+	margin: 0;
+	padding: 5px;
+}
+.page2 .datmon select{
+	width: 45%;
+	height: 30px;
+	float: left;
+	margin-right: 1%;
+	padding: 0;
+}
+.page2 .datmon input#slmon{
+	float: left;
+	width: 25%;
+	margin: 0;
+	padding: 5px 1%;
+}
+.page2 .datmon button{
+	border: 1px solid #000;
+	float: left;
+	height: 30px;
+	padding: 5px 0;
+	margin-left: 1%;
+	width: 20%;
+}
+.active{
+	background: green;
+}
+.disabled{
+	opacity: 0.15;
+	cursor: default;
+	pointer-events: none;
+}
+.disabled button{
+	height: 20px!important;
+}
+.red{
+	color: red;
+}

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bếp</title>
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.4.5.min.css">
+  <link rel="stylesheet" href="_assets/css/jqm-demos.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/jquery.mobile-1.4.5.min.js"></script>
+  <script src="nutbam.js"></script>
+</head>
+<body>
+  <div data-role="page" class="bodybep" id="id1" style="height: 550px; font-weight: bold; text-align: center; background: white">
+
+         
+      
+    <ul id="menu-table" style="width: 340px; float:left; padding-left: 15px;">
+        
+        <li style="margin-bottom: 10px; font-size: 16px; float :left">
+                    <a id="available" data-role="button" style=" height: 30px;float: left">Bàn trống</a>
+                    <a id="unavailable" data-role="button" style="height: 30px;float: left; background: yellow">Có khách</a>
+        <a id="request-order" data-role="button" style="height: 30px;float: left; background: red" >Có yêu cầu</a>                               
+        </li>
+        <li style="margin-bottom: 10px; font-size: 16px; float :left">
+                   <a id="101" data-role="button" class="nutbam">101</a>
+                   <a id="102" data-role="button" class="nutbam">102</a>
+                   <a id="103" data-role="button" class="nutbam">103</a>
+                   <a id="104" data-role="button" class="nutbam">104</a>
+                   <a id="105" data-role="button" class="nutbam">105</a>
+                   <a id="106" data-role="button" class="nutbam">106</a>
+                   <a id="107" data-role="button" class="nutbam">107</a>
+                   <a id="108" data-role="button" class="nutbam">108</a>
+                   <a id="109" data-role="button" class="nutbam">109</a>
+        </li>    
+        <li style="margin-bottom: 10px; font-size: 16px; float :left">
+                   <a id="201" data-role="button" class="nutbam">201</a>
+                   <a id="202" data-role="button" class="nutbam">202</a>
+                   <a id="203" data-role="button" class="nutbam">203</a>
+                   <a id="204" data-role="button" class="nutbam">204</a>
+                   <a id="205" data-role="button" class="nutbam">205</a>
+                   <a id="206" data-role="button" class="nutbam">206</a>
+                   <a id="207" data-role="button" class="nutbam">207</a>
+                   <a id="208" data-role="button" class="nutbam">208</a>
+                   <a id="209" data-role="button" class="nutbam">209</a>
+         <li>          
+    </ul>
+     <div id="table" style="float: left; margin: 16px 0 0 30px;">
+
+           <div id="detail-table" style=" margin-bottom: 10px; font-size: 50px; color: red">
+                <span id ="tablename"></span>
+            </div>
+            <table id="menu-order" border="1" style="display: none">
+
+            </table>
+            <table class="tieude" style="display: none">
+                <tr class="tieude">
+                    <td>Thời gian chờ</td>
+                    <td>Tên món</td>
+                    <td>Số lượng</td>
+                    <td>Tổng</td>
+                    <td colspan="3">Thao tác</td>         <!-- merger 3 column-->
+                </tr>
+            </table>
+
+            <table id="menu-invisible" style="display:none">
+                <tr id-order class="chitiet">
+                    <td class="thoigiandoi"></td>
+                    <td class="tenmon"></td>
+                    <td class="soluong"></td>
+                    <td class="tong"></td>
+                    <td>
+                        <a data-role="button" style="width: 100px; height: 50px; float:left; margin-top:2%" class="danhan">Bếp nhận</a>
+                    </td>
+                    <td>
+                        <a data-role="button" style="width: 100px; height: 50px; float:left;margin-top:2%" class="dagui">Bếp gửi</a>
+                    </td>
+                    <td>
+                        <a data-role="button" style="width: 100px; height: 50px; float:left;margin-top:2%" class="huy">Hủy</a>
+                    </td>
+                </tr>
+            </table>
+   </div>
+       
+   </div>  
+</body>
+</html>
