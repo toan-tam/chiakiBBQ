@@ -5,7 +5,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 CREATE database IF NOT EXISTS  chiakibbq;
 
-DROP TABLE IF EXISTS `datmon`;
+DROP TABLE IF EXISTS `datmon`; 
+
 CREATE TABLE `datmon` (
   `IdDatMon` int(11) NOT NULL AUTO_INCREMENT,
   `IdMon` int(11) DEFAULT NULL,
