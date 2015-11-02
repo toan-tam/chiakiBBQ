@@ -3,6 +3,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for datmon
 -- ----------------------------
+CREATE database IF NOT EXISTS  chiakibbq;
+
 DROP TABLE IF EXISTS `datmon`;
 CREATE TABLE `datmon` (
   `IdDatMon` int(11) NOT NULL AUTO_INCREMENT,
