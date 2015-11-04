@@ -48,11 +48,10 @@ function timer(IdDatMon){
 
 $(document).ready(function(){
 
-	$("#mon").combify();
 	chonTang('1'); //Hien thi ds ban o tang 1
 	
 	//Hien thi danh sach mon de datmon
-	$('.datmon #mon').html('');
+	$('.datmon #mon').html('<option>Chọn món</option>');
 	$.ajax({
 		url		: 'connect.php?getDsMon',
 		type 	: 'GET',
@@ -73,12 +72,27 @@ $(document).ready(function(){
 
 
 	var tenban = '', khachnhan = 0;
+	var clickban_check = true;
 	$('.dsban').on('click','.nutbam',function(){
+		check = false;
 		//Hien thi chi tiet ban
 		$('.page1').fadeOut(100,function(){
 			$('.page2').fadeIn(100);
 		});
 
+		if (clickban_check) {
+			$("#mon").combify();
+			clickban_check = false;
+		};
+		
+		$('#CombifyInput-mon').css('height','25px').parent().parent().css({'float':'left', 'margin-right':'5px'});
+		$('#CombifyInput-mon').focus(function () {
+			if (!check) {
+			$('.datmon').find('option')[0].remove();
+				check = true;				
+			};
+			$(this).attr('value', '');
+		});
 		tenban = $(this).attr('id');
 		$('#tenban').html(tenban);
 
