@@ -47,6 +47,8 @@ function timer(IdDatMon){
 }
 
 $(document).ready(function(){
+
+	$("#mon").combify();
 	chonTang('1'); //Hien thi ds ban o tang 1
 	
 	//Hien thi danh sach mon de datmon
