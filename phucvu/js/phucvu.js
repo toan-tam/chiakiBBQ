@@ -51,7 +51,7 @@ $(document).ready(function(){
 	chonTang('1'); //Hien thi ds ban o tang 1
 	
 	//Hien thi danh sach mon de datmon
-	$('.datmon #mon').html('<option>Chọn món</option>');
+	$('.datmon #mon').html('');
 	$.ajax({
 		url		: 'connect.php?getDsMon',
 		type 	: 'GET',
@@ -73,8 +73,8 @@ $(document).ready(function(){
 
 	var tenban = '', khachnhan = 0;
 	var clickban_check = true;
+	check = false;
 	$('.dsban').on('click','.nutbam',function(){
-		check = false;
 		//Hien thi chi tiet ban
 		$('.page1').fadeOut(100,function(){
 			$('.page2').fadeIn(100);
@@ -87,10 +87,6 @@ $(document).ready(function(){
 		
 		$('#CombifyInput-mon').css('height','25px').parent().parent().css({'float':'left', 'margin-right':'5px'});
 		$('#CombifyInput-mon').focus(function () {
-			if (!check) {
-			$('.datmon').find('option')[0].remove();
-				check = true;				
-			};
 			$(this).attr('value', '');
 		});
 		tenban = $(this).attr('id');
@@ -231,8 +227,14 @@ $(document).ready(function(){
 	$('#btndatmon').click(function(){
 		var idmon = $('#mon').val();
 		var slmon = $('#slmon').val();
-		if(isNaN(slmon) || slmon == ''){
-			canhbao('Số lượng món đã nhập không phải là số, vui lòng kiểm tra lại!');
+		if (isNaN(idmon) || idmon == '') {
+			$('#CombifyInput-mon').focus();
+			canhbao('Tên món không hợp lệ!');
+		}
+		else if(isNaN(slmon) || slmon == ''){
+			$('#slmon').focus();
+			$('#slmon').val('');
+			canhbao('Số lượng món đã nhập không phải là số, vui lòng nhập lại!');
 		} else {
 			$('#thongbao').dialog({
 				modal	: true,
@@ -257,7 +259,6 @@ $(document).ready(function(){
 								$('#'+tenban+'').trigger('click');
 							}
 						});
-						$('#mon').val('');
 						$('#slmon').val('');
 						$('#thongbao').dialog('close');
 					},
