@@ -108,12 +108,25 @@ $(document).ready(function(){
 					$('.invisible table.mon .soluong').html(item['SoLuong']);
 					var tinhtrang='';
 					switch(item['TrangThai']){
-						case '0': tinhtrang = 'Đang gửi lên bếp'; break;
-						case '1': tinhtrang = 'Bếp đã nhận'; break;
-						case '2': tinhtrang = 'Bếp đã gửi xuống'; break;
-						case '3': tinhtrang = 'Bếp hủy món'; break;
+						case '0':
+							tinhtrang = 'Đang gửi lên bếp';
+							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
+							break;
+						case '1': 
+							tinhtrang = 'Bếp đã nhận';
+							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
+							break;
+						case '2': 
+							tinhtrang = 'Bếp đã gửi xuống';
+							$('.invisible table.mon .tinhtrang').css({'background': 'yellow','color': '', 'font-weight': 'bold'});
+							break;
+						case '3':
+							tinhtrang = 'Bếp hủy món';
+							$('.invisible table.mon .tinhtrang').css({'background': 'darkgreen','color': '#FFF', 'font-weight': 'bold'});
+							break;
 						case '4':
 							tinhtrang = 'Khách đã nhận';
+							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
 							khachnhan++;
 							$('.invisible table.mon button.khachnhan').addClass('active');
 							$('.invisible table.mon tr').addClass('disabled');
@@ -306,6 +319,7 @@ $(document).ready(function(){
 
 	//Quay lai danh sach ban
 	$('#xemdsban').click(function(){
+		tenban = '';
 		$('.page2').fadeOut(100,function(){
 			$('.page1').fadeIn(100);
 		});

@@ -42,7 +42,7 @@
                             FROM Mon, DatMon
                             WHERE Mon.Id = DatMon.IdMon AND TrangThai = 0
                             Group By TenMon) AS T2
-                On  T1.TenMon = T2.TenMon2";
+                On  T1.TenMon = T2.TenMon2 ORDER BY TGKhachDat";
         $query=mysqli_query($conn, $sql);
         if(mysqli_num_rows($query)>0){
             while ($row = mysqli_fetch_assoc($query)){
