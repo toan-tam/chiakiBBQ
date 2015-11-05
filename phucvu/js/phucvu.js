@@ -240,13 +240,14 @@ $(document).ready(function(){
 	$('#btndatmon').click(function(){
 		var idmon = $('#mon').val();
 		var slmon = $('#slmon').val();
-		if (isNaN(idmon) || idmon == '') {
+		r =/^\d+$/;
+		if (isNaN(idmon) || idmon == '' || r.test($('#CombifyInput-mon').val())) {
 			$('#CombifyInput-mon').focus();
 			canhbao('Tên món không hợp lệ!');
 		}
 		else if(isNaN(slmon) || slmon == ''){
 			$('#slmon').focus();
-			$('#slmon').val('');
+			$('#slmon').select();
 			canhbao('Số lượng món đã nhập không phải là số, vui lòng nhập lại!');
 		} else {
 			$('#thongbao').dialog({
