@@ -47,6 +47,7 @@ function timer(IdDatMon){
 }
 
 $(document).ready(function(){
+
 	chonTang('1'); //Hien thi ds ban o tang 1
 	
 	//Hien thi danh sach mon de datmon
@@ -71,12 +72,23 @@ $(document).ready(function(){
 
 
 	var tenban = '', khachnhan = 0;
+	var clickban_check = true;
+	check = false;
 	$('.dsban').on('click','.nutbam',function(){
 		//Hien thi chi tiet ban
 		$('.page1').fadeOut(100,function(){
 			$('.page2').fadeIn(100);
 		});
 
+		if (clickban_check) {
+			$("#mon").combify();
+			clickban_check = false;
+		};
+		
+		$('#CombifyInput-mon').css('height','25px').parent().parent().css({'float':'left', 'margin-right':'5px'});
+		$('#CombifyInput-mon').focus(function () {
+			$(this).attr('value', '');
+		});
 		tenban = $(this).attr('id');
 		$('#tenban').html(tenban);
 
@@ -96,12 +108,25 @@ $(document).ready(function(){
 					$('.invisible table.mon .soluong').html(item['SoLuong']);
 					var tinhtrang='';
 					switch(item['TrangThai']){
-						case '0': tinhtrang = 'Đang gửi lên bếp'; break;
-						case '1': tinhtrang = 'Bếp đã nhận'; break;
-						case '2': tinhtrang = 'Bếp đã gửi xuống'; break;
-						case '3': tinhtrang = 'Bếp hủy món'; break;
+						case '0':
+							tinhtrang = 'Đang gửi lên bếp';
+							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
+							break;
+						case '1': 
+							tinhtrang = 'Bếp đã nhận';
+							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
+							break;
+						case '2': 
+							tinhtrang = 'Bếp đã gửi xuống';
+							$('.invisible table.mon .tinhtrang').css({'background': 'yellow','color': '', 'font-weight': 'bold'});
+							break;
+						case '3':
+							tinhtrang = 'Bếp hủy món';
+							$('.invisible table.mon .tinhtrang').css({'background': 'darkgreen','color': '#FFF', 'font-weight': 'bold'});
+							break;
 						case '4':
 							tinhtrang = 'Khách đã nhận';
+							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
 							khachnhan++;
 							$('.invisible table.mon button.khachnhan').addClass('active');
 							$('.invisible table.mon tr').addClass('disabled');
@@ -215,8 +240,14 @@ $(document).ready(function(){
 	$('#btndatmon').click(function(){
 		var idmon = $('#mon').val();
 		var slmon = $('#slmon').val();
-		if(isNaN(slmon) || slmon == ''){
-			canhbao('Số lượng món đã nhập không phải là số, vui lòng kiểm tra lại!');
+		if (isNaN(idmon) || idmon == '') {
+			$('#CombifyInput-mon').focus();
+			canhbao('Tên món không hợp lệ!');
+		}
+		else if(isNaN(slmon) || slmon == ''){
+			$('#slmon').focus();
+			$('#slmon').val('');
+			canhbao('Số lượng món đã nhập không phải là số, vui lòng nhập lại!');
 		} else {
 			$('#thongbao').dialog({
 				modal	: true,
@@ -241,7 +272,6 @@ $(document).ready(function(){
 								$('#'+tenban+'').trigger('click');
 							}
 						});
-						$('#mon').val('');
 						$('#slmon').val('');
 						$('#thongbao').dialog('close');
 					},
@@ -289,6 +319,7 @@ $(document).ready(function(){
 
 	//Quay lai danh sach ban
 	$('#xemdsban').click(function(){
+		tenban = '';
 		$('.page2').fadeOut(100,function(){
 			$('.page1').fadeIn(100);
 		});
