@@ -8,7 +8,7 @@ function chonTang(tang){
 		dataType: 'json',
 		success : function(data){
 			$.each(data,function(key,item){
-				var ban = '<button id="'+item['TenBan']+'" class="nutbam">'+item['TenBan']+'</button>';
+				var ban = '<button id="'+item['TenBan']+'" class="nutbam">'+item['TenBan']+'<img src="images/arrow-down.png" class="img_display" style="display:none;"></button>';
 				$('.dsban').append(ban).fadeIn(200);
 				$('#'+item['TenBan']+'').css('background',item['Mau']);
 			});
@@ -72,23 +72,13 @@ $(document).ready(function(){
 
 
 	var tenban = '', khachnhan = 0;
-	var clickban_check = true;
 	check = false;
 	$('.dsban').on('click','.nutbam',function(){
 		//Hien thi chi tiet ban
 		$('.page1').fadeOut(100,function(){
 			$('.page2').fadeIn(100);
 		});
-
-		if (clickban_check) {
-			$("#mon").combify();
-			clickban_check = false;
-		};
 		
-		$('#CombifyInput-mon').css('height','25px').parent().parent().css({'float':'left', 'margin-right':'5px'});
-		$('#CombifyInput-mon').focus(function () {
-			$(this).attr('value', '');
-		});
 		tenban = $(this).attr('id');
 		$('#tenban').html(tenban);
 
@@ -140,7 +130,7 @@ $(document).ready(function(){
                     if(item['TrangThai']!='4'){
                         setInterval(function(){
                             timer(item['IdDatMon']);
-                        },1000);
+                        },3000);
                     }
 					$('.invisible table.mon button.khachnhan').removeClass('active');
 					$('.invisible table.mon tr').removeClass('disabled');
@@ -240,13 +230,14 @@ $(document).ready(function(){
 	$('#btndatmon').click(function(){
 		var idmon = $('#mon').val();
 		var slmon = $('#slmon').val();
-		if (isNaN(idmon) || idmon == '') {
+		r =/^\d+$/;
+		if (isNaN(idmon) || idmon == '' || r.test($('#CombifyInput-mon').val())) {
 			$('#CombifyInput-mon').focus();
 			canhbao('Tên món không hợp lệ!');
 		}
 		else if(isNaN(slmon) || slmon == ''){
 			$('#slmon').focus();
-			$('#slmon').val('');
+			$('#slmon').select();
 			canhbao('Số lượng món đã nhập không phải là số, vui lòng nhập lại!');
 		} else {
 			$('#thongbao').dialog({
@@ -334,7 +325,12 @@ $(document).ready(function(){
             
             success: function(result){
                 $.each(result,function(key, item){
-                    $('#'+item['TenBan']+'').css('background',item['Mau']);
+                    $('#'+item['TenBan']).css('background',item['Mau']);
+                    if (item['Mau'] == 'yellow') {
+                    	$('#'+item['TenBan']+' .img_display').css('display','initial');
+                    } else{
+                    	$('#'+item['TenBan']+' .img_display').css('display','none');
+                    };
                     if((item['LamMoi'] == 2 || item['LamMoi'] == 3) && item['TenBan'] == tenban){
                         $('#'+tenban+'').trigger('click');
                         $.ajax({
@@ -355,5 +351,41 @@ $(document).ready(function(){
             }
         });
     }
-    setInterval(refresh,1000);
+    setInterval(refresh,3000);
+
+    // this is for the number of food
+     // This button will increment the value
+    $('.qtyplus').click(function(e){
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        // Get its current value
+        var currentVal = parseInt($('input[name='+fieldName+']').val());
+        // If is not undefined
+        if (!isNaN(currentVal)) {
+            // Increment
+            $('input[name='+fieldName+']').val(currentVal + 1);
+        } else {
+            // Otherwise put a 0 there
+            $('input[name='+fieldName+']').val(1);
+        }
+    });
+    // This button will decrement the value till 0
+    $(".qtyminus").click(function(e) {
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        // Get its current value
+        var currentVal = parseInt($('input[name='+fieldName+']').val());
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 1) {
+            // Decrement one
+            $('input[name='+fieldName+']').val(currentVal - 1);
+        } else {
+            // Otherwise put a 0 there
+            $('input[name='+fieldName+']').val(1);
+        }
+    });
 });

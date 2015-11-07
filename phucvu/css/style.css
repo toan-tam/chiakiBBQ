@@ -5,7 +5,7 @@
 body{
 	margin: 0;
 	padding: 0;
-	font-size: 12px;
+	font-size: 15px;
 	font-family: Arial;
 	background: #C88E42;
 }
@@ -165,17 +165,12 @@ td.tenmon, td.tinhtrang{
 	padding: 5px;
 }
 .page2 .datmon select{
-	width: 45%;
-	height: 30px;
+	width: 40%;
+	height: 40px;
 	float: left;
 	margin-right: 1%;
 	padding: 0;
-}
-.page2 .datmon input#slmon{
-	float: left;
-	width: 25%;
-	margin: 0;
-	padding: 5px 1%;
+	font-size: 20px;
 }
 .page2 .datmon button{
 	border: 1px solid #000;
@@ -198,4 +193,11 @@ td.tenmon, td.tinhtrang{
 }
 .red{
 	color: red;
+}
+#btndatmon{
+	height: 40px!important;
+	margin-left: 20px;
+}
+.ui-icon-arrowthickstop-1-s{
+	font-size: 100px;
 }

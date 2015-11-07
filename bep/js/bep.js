@@ -60,7 +60,7 @@ function getColor(){
             });
         }
     });
-    setTimeout(getColor,1000);  // update time every 1s
+    setTimeout(getColor,3000);  // update time every 1s
 }
 
 function canhbao(tinnhan){
@@ -79,13 +79,12 @@ function canhbao(tinnhan){
 }
 
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
-
+   
     getColor();
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
     var xacnhan = false;
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
         var tenban = $(this).html();                       // Gets HTML from button clicked
-        
         $('table#menu-order').css('display','');
         
         $('.ChonBan').removeClass("ChonBan");
@@ -120,7 +119,7 @@ $( document ).ready(function() {                            //Specifies the func
                         if(item['TrangThai']!='4'){
                             setInterval(function(){
                                 timer(item['IdDatMon']);
-                            },1000);
+                            },3000);
                         }
 
                         var btn_danhan = $("table#menu-order tr[id-order='" + item['IdDatMon'] + "'] a.danhan");

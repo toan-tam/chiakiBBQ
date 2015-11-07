@@ -4,12 +4,10 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>Phục vụ</title>
-	<link href="plugin/jquery-ui/jquery-ui.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+	<link href="plugin/jquery-ui/jquery-ui.css" rel="stylesheet">
 	<script src="js/jquery-1.7.2.min.js" type="text/javascript"></script>
 	<script src="plugin/jquery-ui/jquery-ui.js" type="text/javascript"></script>
-	<link rel="stylesheet" type="text/css" href="css/jquery.ui.combify.css">
-	<script type="text/javascript" src="js/jquery.ui.combify.js"></script>
 	<script src="js/phucvu.js" type="text/javascript"></script>
 </head>
 <body>
@@ -53,7 +51,13 @@
 				<select name="mon" id="mon">
 
 				</select>
-				<input type="text" placeholder="Nhập số lượng..." id="slmon">
+				<!-- <input type="text" placeholder="Nhập số lượng..." id="slmon"> -->
+				 <div style="float:left; margin-left: 20px;">
+				<input type='button' value='-' class='qtyminus' field='quantity' />
+			    <input type='text' name='quantity' value='1' class='qty' id="slmon" />
+			    <input type='button' value='+' class='qtyplus' field='quantity' />
+				</div>
+				
 				<button id="btndatmon">Đặt món</button>
 			</div>
 		</div>
@@ -90,3 +94,14 @@
 	</div>
 </body>
 </html>
+
+<style type="text/css" media="screen">
+	.qty {
+    width: 40px;
+    height: 30px;
+    text-align: center;
+    font-size: 25px;
+}
+input.qtyplus { width:60px; height:40px; font-size: 25px;}
+input.qtyminus { width:60px; height:40px;font-size: 25px}
+</style>
