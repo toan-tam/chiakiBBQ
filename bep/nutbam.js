@@ -34,12 +34,10 @@ function timer(IdDatMon){
 }
 
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
-    
+    getColor();
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
-    
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
-        var tenban = $(this).html();                       // Gets HTML from button clicked
-        
+        var tenban = $(this).html();                       // Gets HTML from button clicked    
         $('table#menu-order').css('display','');
         
         $('.ChonBan').removeClass("ChonBan");
@@ -74,7 +72,7 @@ $( document ).ready(function() {                            //Specifies the func
                         if(item['TrangThai']!='4'){
                             setInterval(function(){
                                 timer(item['IdDatMon']);
-                            },1000);
+                            },3000);
                         }
 
                         var btn_danhan = $("table#menu-order tr[id-order='" + item['IdDatMon'] + "'] a.danhan");
@@ -231,5 +229,5 @@ $( document ).ready(function() {                            //Specifies the func
         });
         setTimeout(getColor,1000);  // update time every 1s
     }
-    getColor();
+     //$('.nutbam').append('<img src="images/arrow-up.png" style="display:none;">');
 });
