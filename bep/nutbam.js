@@ -33,11 +33,51 @@ function timer(IdDatMon){
     });
 }
 
+function getColor(){
+    $.ajax({
+        url         : 'connect.php?act=getColor',
+        type        : 'GET',
+        async       : false,
+        dataType    : 'json',
+        
+        success: function(result){
+            $.each(result,function(key, item){
+                $('#'+item['TenBan']+'').css('background',item['Mau']);
+                if(item['Mau']=='red')
+                    $('#'+item['TenBan']+' .img_display').css('display','initial');
+                else
+                    $('#'+item['TenBan']+' .img_display').css('display','none');
+
+                if((item['LamMoi'] == 1) && item['TenBan'] == $('.ChonBan').attr('id')){
+                    $('.ChonBan').trigger('click');
+                    $.ajax({
+                        url     : 'update.php?act=resetClick',
+                        type    : 'POST',
+                        async   : false,
+                        data    : {
+                            click   : item['LamMoi'],
+                            mode    : 1,
+                            tenban  : item['TenBan']
+                        },
+                        success: function(){
+                            //Do nothing
+                        }
+                    });
+                }
+            });
+        }
+    });
+    setTimeout(getColor,1000);  // update time every 1s
+}
+
+
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
+    $('.nutbam').append('<img src="images/arrow-up.png" class="img_display" style="display:none;">');
     getColor();
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
-        var tenban = $(this).html();                       // Gets HTML from button clicked    
+        var tenban = $(this).html().split('<img')[0];                       // Gets HTML from button clicked 
+        console.log(tenban);   
         $('table#menu-order').css('display','');
         
         $('.ChonBan').removeClass("ChonBan");
@@ -117,7 +157,6 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=danhan',
                                     async   : false,
                                     success : function(data){
-                                        console.log(data);
                                         lastColor = tableState(item['TenBan']);     // Updates color of Table after clicking on food lines
                                     },
                                     data    : {
@@ -144,7 +183,6 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dagui',
                                     async   : false,
                                     success : function(data){
-                                        console.log(data);
                                           lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {
@@ -173,7 +211,6 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dahuy',
                                     async   : false,
                                     success : function(data){
-                                        console.log(data);
                                         lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {
@@ -197,37 +234,5 @@ $( document ).ready(function() {                            //Specifies the func
         }
     
     });
-    
-    function getColor(){
-        $.ajax({
-            url         : 'connect.php?act=getColor',
-            type        : 'GET',
-            async       : false,
-            dataType    : 'json',
-            
-            success: function(result){
-                $.each(result,function(key, item){
-                    $('#'+item['TenBan']+'').css('background',item['Mau']);
-                    if((item['LamMoi'] == 1 || item['LamMoi'] == 3) && item['TenBan'] == $('.ChonBan').attr('id')){
-                        $('.ChonBan').trigger('click');
-                        $.ajax({
-                            url     : 'update.php?act=resetClick',
-                            type    : 'POST',
-                            async   : false,
-                            data    : {
-                                click   : item['LamMoi'],
-                                mode    : 1,
-                                tenban  : item['TenBan']
-                            },
-                            success: function(){
-                                //Do nothing
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        setTimeout(getColor,1000);  // update time every 1s
-    }
      //$('.nutbam').append('<img src="images/arrow-up.png" style="display:none;">');
 });
