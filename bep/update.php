@@ -39,18 +39,23 @@
         }
     }
 
-    if(isset($_REQUEST['tenban']) && isset($_REQUEST['act']) && $_REQUEST['act']=='resetClick'){
-        // If click = 3 then both page have to reload table#tenban so if one page reload,
-        // it's necessary to set the click value as 1||2
-        // to make sure the other page will be reload table#tenban
-        if($_REQUEST['click']==3){
-            if($_REQUEST['mode']==1){
-                $click = 2;
-            } else $click = 1;
-        } else $click = 0;  //Or Else, set the table click value as 0
-                            //to make sure it will not be unnecessarily reloaded
+    if(isset($_REQUEST['resetClick'])){
         $sql = "UPDATE dsBan
-                SET LamMoi = {$click}
+                SET LamMoi = 0
                 WHERE TenBan = '{$_REQUEST['tenban']}'";
+        mysqli_query($conn,$sql);
+    }
+
+    if(isset($_REQUEST['acceptCancel'])){
+        $sql = "UPDATE datmon
+                SET TrangThai = 6
+                WHERE IdDatMon = '{$_REQUEST['ID_DatMon']}'";
+        mysqli_query($conn,$sql);
+    }
+
+    if(isset($_REQUEST['ignoreCancel'])){
+        $sql = "UPDATE datmon
+                SET TrangThai = 7
+                WHERE IdDatMon = '{$_REQUEST['ID_DatMon']}'";
         mysqli_query($conn,$sql);
     }
