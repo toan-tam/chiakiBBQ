@@ -78,6 +78,8 @@ function canhbao(tinnhan){
     }).css('font','20px Arial');
 }
 
+
+
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
    
     getColor();
@@ -198,7 +200,6 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dagui',
                                     async   : false,
                                     success : function(data){
-                                        console.log(data);
                                           lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {
@@ -227,7 +228,6 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dahuy',
                                     async   : false,
                                     success : function(data){
-                                        console.log(data);
                                         lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {

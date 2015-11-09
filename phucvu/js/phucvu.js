@@ -8,7 +8,12 @@ function chonTang(tang){
 		dataType: 'json',
 		success : function(data){
 			$.each(data,function(key,item){
-				var ban = '<button id="'+item['TenBan']+'" class="nutbam">'+item['TenBan']+'<img src="images/arrow-down.png" class="img_display" style="display:none;"></button>';
+				var ban = '';
+                if (item['Mau'] == 'yellow') {
+                	ban = '<button id="'+item['TenBan']+'" class="nutbam">'+item['TenBan']+'<img src="images/arrow-down.png" class="img_display" style="display:initial;"></button>';
+                } else{
+                	ban = '<button id="'+item['TenBan']+'" class="nutbam">'+item['TenBan']+'<img src="images/arrow-down.png" class="img_display" style="display:none;"></button>';
+                };
 				$('.dsban').append(ban).fadeIn(200);
 				$('#'+item['TenBan']+'').css('background',item['Mau']);
 			});
