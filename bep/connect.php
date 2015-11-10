@@ -40,8 +40,8 @@
                 FROM datmon LEFT JOIN mon ON datmon.IdMon = mon.Id
                 WHERE datmon.TrangThai = 5 AND datmon.TraBan = 0";
         $query = mysqli_query($conn, $sql);
+        $result['cancel'] = mysqli_num_rows($query);
         if(mysqli_num_rows($query)>0){
-            $result['cancel'] = '1';
             while($row = mysqli_fetch_assoc($query)){
                 $row['data'] = 'lstCancel';
                 $result[] = $row;

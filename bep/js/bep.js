@@ -33,7 +33,7 @@ function timer(IdDatMon){
     });
 }
 
-function getColor(){
+function getColor(count){
     $.ajax({
         url         : 'connect.php?act=getColor',
         type        : 'GET',
@@ -41,7 +41,7 @@ function getColor(){
         dataType    : 'json',
         
         success: function(result){
-            if(result['cancel'] == '1') $('ul.notice').html();
+            if(result['cancel'] != count) $('.notice ul').html('');
             $.each(result,function(key, item){
                 if(item['data']=='getColor'){
                     $('#'+item['TenBan']+'').css('background',item['Mau']);
@@ -57,8 +57,6 @@ function getColor(){
                             type    : 'POST',
                             async   : false,
                             data    : {
-                                click   : item['LamMoi'],
-                                mode    : 1,
                                 tenban  : item['TenBan']
                             },
                             success: function(){
@@ -66,19 +64,22 @@ function getColor(){
                             }
                         });
                     }
-                } else if(item['data'] = 'lstCancel'){
-                    var data = '<li><a id="'+item['IdDatMon']+'">'+item['TenBan']+': '+item['TenMon']+'</a></li>';
+                } else if(item['data'] == 'lstCancel' && result['cancel'] != count){
+                    var data = '<li><a href="#" id="'+item['IdDatMon']+'">'+item['TenBan']+': '+item['TenMon']+'</a></li>';
                     $('.notice ul').append(data);
                 }
             });
+            if(result['cancel'] != count) count = result['cancel'];;
         }
     });
-    setTimeout(getColor,3000);  // update time every 1s
+    setTimeout(function(){
+        getColor(count);
+    },3000);  // update time every 3s
 }
 
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
     $('.nutbam').append('<img src="images/arrow-up.png" class="img_display" style="display:none;">');
-    getColor();
+    getColor(0);
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
         var tenban = $(this).html().split('<img')[0];                       // Gets HTML from button clicked   
@@ -239,7 +240,8 @@ $( document ).ready(function() {                            //Specifies the func
         }
     
     });
-    $('.notice a').click(function() {
+
+    $('.notice').on('click','a',function(){
         if(confirm('Cho hủy món này nha anh bếp đẹp dzai <3 <3')){
             $.ajax({
                 type    : 'POST',
@@ -249,6 +251,7 @@ $( document ).ready(function() {                            //Specifies the func
                     alert('Cảm ưn anh đẹp dzai!!');
                 },
                 data    : {
+                    tenBan : $(this).html().split(':')[0],
                     ID_DatMon: $(this).attr('id')
                 }
             });  
@@ -261,6 +264,7 @@ $( document ).ready(function() {                            //Specifies the func
                     alert('Người đâu mà khó tính -_-');
                 },
                 data    : {
+                    tenBan : $(this).html().split(':')[0],
                     ID_DatMon: $(this).attr('id')
                 }
             });

@@ -8,20 +8,24 @@
 	        $sql = "INSERT INTO datmon(IdMon, TenBan, SoLuong)
 	                VALUES({$_REQUEST['idMon']},'{$_REQUEST['tenBan']}',{$_REQUEST['slMon']})";
 	        mysqli_query($conn,$sql);
+
 	        $sql = "UPDATE dsBan
 	                SET Mau = 'red'
-	                WHERE TenBan IN (SELECT TenBan FROM DatMon
-	                                    WHERE IdMon = {$_REQUEST['idMon']} AND TraBan = 0)";
-	        mysqli_query($conn,$sql);		
+	                WHERE TenBan = '{$_REQUEST['tenBan']}'";
+	        mysqli_query($conn,$sql);
+
 			$sql = "UPDATE dsBan
 	                SET LamMoi = 1
-	                WHERE TenBan = '{$_REQUEST['tenBan']}'";
+	                WHERE TenBan IN (SELECT TenBan FROM DatMon
+	                                    WHERE IdMon = {$_REQUEST['idMon']} AND TraBan = 0)";
 	        mysqli_query($conn,$sql);
 		}
 	}
 
 	if(isset($_REQUEST['resetLamMoi'])){
-		$sql = "UPDATE dsBan SET LamMoi = 0 WHERE TenBan = {$_REQUEST['tenban']}";
+		$sql = "UPDATE dsBan
+				SET LamMoi = 0
+				WHERE TenBan = {$_REQUEST['tenban']}";
 		mysqli_query($conn,$sql);
 	}
 
@@ -35,12 +39,34 @@
 	        $sql = "DELETE FROM DatMon
 	                WHERE IdDatMon='{$_REQUEST['idDMon']}'";
         	mysqli_query($conn,$sql);
-		}
 
-        $sql = "UPDATE dsBan
-        		SET LamMoi = 1
-        		WHERE TenBan IN (SELECT TenBan FROM DatMon WHERE IdMon = {$_REQUEST['idMon']})";
-        mysqli_query($conn,$sql);
+			$sql = "SELECT IdDatMon FROM DatMon
+					WHERE TenBan = '{$_REQUEST['tenBan']}'
+					AND TraBan = 0";
+			$rs = mysqli_query($conn,$sql);
+			$red = false;
+			$color = '#f6f6f6';
+			if(mysqli_num_rows($rs) > 0){
+				while($row = mysqli_fetch_assoc($rs)){
+					if($row['TrangThai'] == 0 || $row['TrangThai'] == 1){
+						$red = true;
+						break;
+					}
+				}
+				if($red) $color = 'red';
+				else $color = 'yellow';
+			}
+
+			$sql = "UPDATE dsBan
+	        		SET Mau = '{$color}'
+	        		WHERE TenBan ='{$_REQUEST['tenBan']}'";
+    		mysqli_query($conn,$sql);
+
+	        $sql = "UPDATE dsBan
+	        		SET LamMoi = 1
+	        		WHERE TenBan IN (SELECT TenBan FROM DatMon WHERE IdMon = {$_REQUEST['idMon']})";
+	        mysqli_query($conn,$sql);
+		}
 	}
 
 	if(isset($_REQUEST['khachnhanmon'])){

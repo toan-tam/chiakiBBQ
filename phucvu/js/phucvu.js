@@ -130,6 +130,7 @@ $(document).ready(function(){
 							tinhtrang = 'Đang gửi lên bếp';
 							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
 							break;
+						case '7':
 						case '1': 
 							tinhtrang = 'Bếp đã nhận';
 							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
@@ -138,6 +139,7 @@ $(document).ready(function(){
 							tinhtrang = 'Bếp đã gửi xuống';
 							$('.invisible table.mon .tinhtrang').css({'background': 'yellow','color': '', 'font-weight': 'bold'});
 							break;
+						case '6':
 						case '3':
 							tinhtrang = 'Bếp hủy món';
 							khachnhan++;
@@ -391,15 +393,13 @@ $(document).ready(function(){
                     } else{
                     	$('#'+item['TenBan']+' .img_display').css('display','none');
                     };
-                    if((item['LamMoi'] == 2 || item['LamMoi'] == 3) && item['TenBan'] == tenban){
+                    if((item['LamMoi'] == 2) && item['TenBan'] == tenban){
                         $('#'+tenban+'').trigger('click');
                         $.ajax({
                             url     : 'update.php?resetLamMoi',
                             type    : 'POST',
                             async   : false,
                             data    : {
-                                LamMoi   : item['LamMoi'],
-                                trang    : 'phucvu',
                                 tenban  : item['TenBan']
                             },
                             success: function(){

@@ -51,11 +51,21 @@
                 SET TrangThai = 6
                 WHERE IdDatMon = '{$_REQUEST['ID_DatMon']}'";
         mysqli_query($conn,$sql);
+
+        $sql = "UPDATE dsban
+                SET LamMoi = 2
+                WHERE tenban = '{$_REQUEST['tenBan']}'";
+        mysqli_query($conn,$sql);
     }
 
     if(isset($_REQUEST['ignoreCancel'])){
         $sql = "UPDATE datmon
                 SET TrangThai = 7
                 WHERE IdDatMon = '{$_REQUEST['ID_DatMon']}'";
+        mysqli_query($conn,$sql);
+
+        $sql = "UPDATE dsban
+                SET LamMoi = 2
+                WHERE tenban = '{$_REQUEST['tenBan']}'";
         mysqli_query($conn,$sql);
     }
