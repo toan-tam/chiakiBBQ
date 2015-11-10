@@ -8,8 +8,14 @@
 	        $sql = "INSERT INTO datmon(IdMon, TenBan, SoLuong)
 	                VALUES({$_REQUEST['idMon']},'{$_REQUEST['tenBan']}',{$_REQUEST['slMon']})";
 	        mysqli_query($conn,$sql);
+
 	        $sql = "UPDATE dsBan
-	                SET Mau = 'red', LamMoi = 3
+	                SET Mau = 'red'
+	                WHERE TenBan = '{$_REQUEST['tenBan']}'";
+	        mysqli_query($conn,$sql);
+
+			$sql = "UPDATE dsBan
+	                SET LamMoi = 1
 	                WHERE TenBan IN (SELECT TenBan FROM DatMon
 	                                    WHERE IdMon = {$_REQUEST['idMon']} AND TraBan = 0)";
 	        mysqli_query($conn,$sql);
@@ -17,36 +23,50 @@
 	}
 
 	if(isset($_REQUEST['resetLamMoi'])){
-		if($_REQUEST['LamMoi'] == 3){
-			if($_REQUEST['trang']=='phucvu'){
-				$lammoi = 1;
-			} else $lammoi = 2;
-		} else $lammoi = 0;
-		$sql = "UPDATE dsBan SET LamMoi = {$lammoi} WHERE TenBan = {$_REQUEST['tenban']}";
+		$sql = "UPDATE dsBan
+				SET LamMoi = 0
+				WHERE TenBan = {$_REQUEST['tenban']}";
 		mysqli_query($conn,$sql);
 	}
 
 	if(isset($_REQUEST['huydatmon'])){
-		$sql = "SELECT * FROM DatMon 
-                WHERE TenBan = '{$_REQUEST['tenBan']}' AND TraBan = 0";
-        $result = mysqli_query($conn,$sql);
-
-        if(mysqli_num_rows($result)==1){
-	        $sql = "UPDATE dsBan
-	                SET Mau = '#f6f6f6'
-	                WHERE TenBan = '{$_REQUEST['tenBan']}'";
+		if(isset($_REQUEST['bepdanhan'])){
+			$sql = "UPDATE DatMon SET TrangThai = 5
+					WHERE IdDatMon='{$_REQUEST['idDMon']}'";
+			mysqli_query($conn,$sql);
+		} else {
+	        //delete the record
+	        $sql = "DELETE FROM DatMon
+	                WHERE IdDatMon='{$_REQUEST['idDMon']}'";
         	mysqli_query($conn,$sql);
-        }
 
-        $sql = "UPDATE dsBan
-        		SET LamMoi = 1
-        		WHERE TenBan IN (SELECT TenBan FROM DatMon WHERE IdMon = {$_REQUEST['idMon']})";
-        mysqli_query($conn,$sql);
+			$sql = "SELECT IdDatMon FROM DatMon
+					WHERE TenBan = '{$_REQUEST['tenBan']}'
+					AND TraBan = 0";
+			$rs = mysqli_query($conn,$sql);
+			$red = false;
+			$color = '#f6f6f6';
+			if(mysqli_num_rows($rs) > 0){
+				while($row = mysqli_fetch_assoc($rs)){
+					if($row['TrangThai'] == 0 || $row['TrangThai'] == 1){
+						$red = true;
+						break;
+					}
+				}
+				if($red) $color = 'red';
+				else $color = 'yellow';
+			}
 
-        //delete the record
-        $sql = "DELETE FROM DatMon
-                WHERE IdDatMon='{$_REQUEST['idDMon']}'";
-        mysqli_query($conn,$sql);
+			$sql = "UPDATE dsBan
+	        		SET Mau = '{$color}'
+	        		WHERE TenBan ='{$_REQUEST['tenBan']}'";
+    		mysqli_query($conn,$sql);
+
+	        $sql = "UPDATE dsBan
+	        		SET LamMoi = 1
+	        		WHERE TenBan IN (SELECT TenBan FROM DatMon WHERE IdMon = {$_REQUEST['idMon']})";
+	        mysqli_query($conn,$sql);
+		}
 	}
 
 	if(isset($_REQUEST['khachnhanmon'])){

@@ -33,7 +33,7 @@ function timer(IdDatMon){
     });
 }
 
-function getColor(){
+function getColor(count){
     $.ajax({
         url         : 'connect.php?act=getColor',
         type        : 'GET',
@@ -41,39 +41,45 @@ function getColor(){
         dataType    : 'json',
         
         success: function(result){
+            if(result['cancel'] != count) $('.notice ul').html('');
             $.each(result,function(key, item){
-                $('#'+item['TenBan']+'').css('background',item['Mau']);
-                if(item['Mau']=='red')
-                    $('#'+item['TenBan']+' .img_display').css('display','initial');
-                else
-                    $('#'+item['TenBan']+' .img_display').css('display','none');
+                if(item['data']=='getColor'){
+                    $('#'+item['TenBan']+'').css('background',item['Mau']);
+                    if(item['Mau']=='red')
+                        $('#'+item['TenBan']+' .img_display').css('display','initial');
+                    else
+                        $('#'+item['TenBan']+' .img_display').css('display','none');
 
-                if((item['LamMoi'] == 1) && item['TenBan'] == $('.ChonBan').attr('id')){
-                    $('.ChonBan').trigger('click');
-                    $.ajax({
-                        url     : 'update.php?act=resetClick',
-                        type    : 'POST',
-                        async   : false,
-                        data    : {
-                            click   : item['LamMoi'],
-                            mode    : 1,
-                            tenban  : item['TenBan']
-                        },
-                        success: function(){
-                            //Do nothing
-                        }
-                    });
+                    if((item['LamMoi'] == 1) && item['TenBan'] == $('.ChonBan').attr('id')){
+                        $('.ChonBan').trigger('click');
+                        $.ajax({
+                            url     : 'update.php?act=resetClick',
+                            type    : 'POST',
+                            async   : false,
+                            data    : {
+                                tenban  : item['TenBan']
+                            },
+                            success: function(){
+                                //Do nothing
+                            }
+                        });
+                    }
+                } else if(item['data'] == 'lstCancel' && result['cancel'] != count){
+                    var data = '<li><a href="#" id="'+item['IdDatMon']+'">'+item['TenBan']+': '+item['TenMon']+'</a></li>';
+                    $('.notice ul').append(data);
                 }
             });
+            if(result['cancel'] != count) count = result['cancel'];;
         }
     });
-    setTimeout(getColor,1000);  // update time every 1s
+    setTimeout(function(){
+        getColor(count);
+    },3000);  // update time every 3s
 }
-
 
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
     $('.nutbam').append('<img src="images/arrow-up.png" class="img_display" style="display:none;">');
-    getColor();
+    getColor(0);
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
         var tenban = $(this).html().split('<img')[0];                       // Gets HTML from button clicked   
@@ -120,6 +126,7 @@ $( document ).ready(function() {                            //Specifies the func
 
                         switch (item['TrangThai']){                                         // Display the color of state of food lines!
                                 case '1':                                                   // when clicking on Table
+                                case '5':
                                     btn_danhan.css("backgroundColor", "green");
                                     btn_dagui.css("backgroundColor", "#f6f6f6");
                                     btn_huy.css("backgroundColor", "#f6f6f6");
@@ -227,10 +234,41 @@ $( document ).ready(function() {                            //Specifies the func
         
         lastColor = tableState(tenban);
         if(lastColor=='#f6f6f6'){
-            $('#table').css('display','none');
+            $('table#menu-order').css('display','none');
         } else {
-            $('#table').css('display','');
+            $('table#menu-order').css('display','');
         }
     
     });
+
+    $('.notice').on('click','a',function(){
+        if(confirm('Cho hủy món này nha anh bếp đẹp dzai <3 <3')){
+            $.ajax({
+                type    : 'POST',
+                url     : 'update.php?acceptCancel',
+                async   : false,
+                success : function(data){
+                    alert('Cảm ưn anh đẹp dzai!!');
+                },
+                data    : {
+                    tenBan : $(this).html().split(':')[0],
+                    ID_DatMon: $(this).attr('id')
+                }
+            });  
+        } else {
+            $.ajax({
+                type    : 'POST',
+                url     : 'update.php?ignoreCancel',
+                async   : false,
+                success : function(data){
+                    alert('Người đâu mà khó tính -_-');
+                },
+                data    : {
+                    tenBan : $(this).html().split(':')[0],
+                    ID_DatMon: $(this).attr('id')
+                }
+            });
+        }
+    });
+
 });

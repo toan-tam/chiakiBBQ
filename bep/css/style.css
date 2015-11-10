@@ -1,0 +1,72 @@
+#menu-invisible{
+	display: none;
+}
+.ChonBan {
+	font-size: 25pt !important;
+	border: 3px solid green !important;
+	padding: 2px !important;
+}
+ul#menu-table li{
+	list-style: none;
+}
+table#menu-order a{
+	color: red!important;
+}
+.bodybep{
+	background-color: #9FF8F3!important;
+}
+
+div.ui-grid-b>.ui-block-b{
+	width: 26%!important;
+}
+
+div.ui-grid-b>.ui-block-c{
+	width: 18%!important;
+}
+
+div.ui-grid-b>.ui-block-a{
+	clear: none;
+	width: 55%!important;
+}
+
+div.notice{
+	border: 1px solid #000!important;
+	width: 100%;
+	margin-top: 25px;
+}
+
+div.notice h2{
+	padding: 10px 0;
+	font-size: 25px;
+	border-bottom: 1px solid #000!important;
+	margin: 0;
+	color: #136EB4;
+}
+
+div.notice ul{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	float: left;
+	height: 365px;
+	overflow-y: scroll;
+}
+
+div.notice li{
+	width: 100%;
+	list-style: none;
+	margin: 3px 0!important;
+	padding: 0;
+	text-align: left;
+	float: left;
+}
+div.notice li a{
+	padding: 10px!important;
+	background: yellow;
+	width: 100%!important;
+	font-size: 20px;
+	text-align: left;
+	word-wrap: break-word;
+	float: left;!important;
+	text-decoration: none;
+}

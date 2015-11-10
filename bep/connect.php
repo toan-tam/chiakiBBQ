@@ -2,6 +2,7 @@
     $conn = mysqli_connect('localhost', 'root', '', 'chiakibbq') or die ('Can not connect to mysql');
     mysqli_query($conn,"SET NAMES 'utf8'");
     $result = array();
+
     if(isset($_REQUEST['tinhTG'])){
         $sql = "SELECT TGKhachNhan, TGKhachDat FROM DatMon WHERE IdDatMon = {$_REQUEST['IdDatMon']}";
         $result = mysqli_query($conn, $sql);
@@ -30,9 +31,23 @@
         $query = mysqli_query($conn,$sql);
         if(mysqli_num_rows($query)>0){
             while($row = mysqli_fetch_assoc($query)){
+                $row['data'] = 'getColor';
                 $result[] = $row;
             }
         }
+
+        $sql = "SELECT TenBan, IdDatMon, TenMon
+                FROM datmon LEFT JOIN mon ON datmon.IdMon = mon.Id
+                WHERE datmon.TrangThai = 5 AND datmon.TraBan = 0";
+        $query = mysqli_query($conn, $sql);
+        $result['cancel'] = mysqli_num_rows($query);
+        if(mysqli_num_rows($query)>0){
+            while($row = mysqli_fetch_assoc($query)){
+                $row['data'] = 'lstCancel';
+                $result[] = $row;
+            }
+        } else $result['cancel'] = '0';
+        die (json_encode($result));
     } else {
         $sql = "SELECT *  FROM
                     (SELECT IdDatMon, DatMon.IdMon, TenBan, TenMon, SoLuong, TGKhachNhan, TGKhachDat, TrangThai
@@ -50,7 +65,7 @@
                 $row['TraBan'] = 0;
                 $result[] = $row;
             }
-        }   
+        }
+        die (json_encode($result));
     }
-    die (json_encode($result));
 ?>

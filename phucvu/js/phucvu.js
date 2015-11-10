@@ -130,6 +130,7 @@ $(document).ready(function(){
 							tinhtrang = 'Đang gửi lên bếp';
 							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
 							break;
+						case '7':
 						case '1': 
 							tinhtrang = 'Bếp đã nhận';
 							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
@@ -138,8 +139,10 @@ $(document).ready(function(){
 							tinhtrang = 'Bếp đã gửi xuống';
 							$('.invisible table.mon .tinhtrang').css({'background': 'yellow','color': '', 'font-weight': 'bold'});
 							break;
+						case '6':
 						case '3':
 							tinhtrang = 'Bếp hủy món';
+							khachnhan++;
 							$('.invisible table.mon .tinhtrang').css({'background': 'darkgreen','color': '#FFF', 'font-weight': 'bold'});
 							break;
 						case '4':
@@ -148,6 +151,10 @@ $(document).ready(function(){
 							khachnhan++;
 							$('.invisible table.mon button.khachnhan').addClass('active');
 							$('.invisible table.mon tr').addClass('disabled');
+							break;
+						case '5':
+							tinhtrang = 'Chờ phản hồi';
+							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': 'bold'});
 							break;
 					}
 					$('.invisible table.mon .tinhtrang').html(tinhtrang);
@@ -208,12 +215,43 @@ $(document).ready(function(){
                     });
 
                     btn_huy.click(function(){                   //Case : update data when click on diffirent state of food lines
-                        if(item['TrangThai']=='4'){
+                    	if(item['TrangThai']=='5'){
+                    		canhbao('Chờ phản hồi từ bếp!');
+                    	} else if(item['TrangThai']=='4'){
                             canhbao('Đã nhận món, không thể hủy');
-                        } else if(item['TrangThai']=='1'){
-                            canhbao('Bếp đã nhận, không thể hủy');
                         } else if(item['TrangThai']=='2'){
                             canhbao('Bếp đã gửi xuống, không thể hủy!');
+                        } else if(item['TrangThai']=='1'){
+                        	$('#thongbao').dialog({
+								modal	: true,
+								title	: 'Hủy đặt món',
+								open	: function(){
+									var tinnhan = 'Xác nhận hủy đặt món:<br><strong class="red">'+item['TenMon']+'</strong>, số lượng: <strong class="red">'+item['SoLuong']+'</strong>';
+									$(this).html(tinnhan);
+								},
+								buttons	: {
+									'Đồng ý'  : function(){
+										$.ajax({
+											url		: 'update.php?huydatmon&bepdanhan',
+											type 	: 'POST',
+											async	: false,
+											data 	: {
+												idDMon 	: item['IdDatMon'],
+												idMon	: item['IdMon'],
+												tenBan 	: tenban
+											},
+											success	: function(){
+												$('#'+tenban+'').trigger('click');
+											}
+										});
+										$('#thongbao').dialog('close');
+										canhbao('Bếp đã nhận, chờ phản hồi từ bếp!');
+									},
+									'Không' : function(){
+										$('#thongbao').dialog('close');
+									}
+								}
+							}).css('font','20px Arial');
                         } else {
                         	$('#thongbao').dialog({
 								modal	: true,
@@ -257,7 +295,6 @@ $(document).ready(function(){
 	//Dat mon
 	$('#btndatmon').click(function(){
 		var idmon = $('#mon option:selected').val();
-		console.log($('#mon'));
 		var slmon = $('#slmon').val();
 
 		if(isNaN(slmon) || slmon == ''){
@@ -356,15 +393,13 @@ $(document).ready(function(){
                     } else{
                     	$('#'+item['TenBan']+' .img_display').css('display','none');
                     };
-                    if((item['LamMoi'] == 2 || item['LamMoi'] == 3) && item['TenBan'] == tenban){
+                    if((item['LamMoi'] == 2) && item['TenBan'] == tenban){
                         $('#'+tenban+'').trigger('click');
                         $.ajax({
                             url     : 'update.php?resetLamMoi',
                             type    : 'POST',
                             async   : false,
                             data    : {
-                                LamMoi   : item['LamMoi'],
-                                trang    : 'phucvu',
                                 tenban  : item['TenBan']
                             },
                             success: function(){
