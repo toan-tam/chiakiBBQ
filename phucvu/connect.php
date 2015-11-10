@@ -3,9 +3,24 @@
 			or die('Cannot connect to database!');
 	mysqli_query($conn,"SET NAMES 'utf8'");
 
+	if(isset($_REQUEST['getLoaiMon'])){
+		$data = array();
+		$other = array();
+		$sql = "SELECT * FROM loaimon ORDER BY TenLoaiMon";
+		$result = mysqli_query($conn,$sql);
+		if(mysqli_num_rows($result)>0){
+			while($row = mysqli_fetch_assoc($result)){
+				if($row['TenLoaiMon']  == "Khác") $other = $row;
+				else $data[] = $row;
+			}
+			$data[] = $other;
+		}
+		die(json_encode($data));
+	}
+
 	if(isset($_REQUEST['getDsMon'])){
 		$data = array();
-		$sql = "SELECT * FROM Mon ORDER BY TenMon";
+		$sql = "SELECT * FROM Mon WHERE IdLoaiMon = {$_REQUEST['IdLoaiMon']} ORDER BY TenMon";
 		$result = mysqli_query($conn, $sql);
 		if(mysqli_num_rows($result)>0){
 			while($row = mysqli_fetch_assoc($result)){

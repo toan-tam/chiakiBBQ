@@ -48,16 +48,20 @@
 			</div>
 			<div class="datmon">
 			<!-- toan tam did something here-->
-				<select name="mon" id="mon">
+				<div class="select">
+					<select name="loaimon" id="loaimon">
 
-				</select>
-				<!-- <input type="text" placeholder="Nhập số lượng..." id="slmon"> -->
-				 <div style="float:left; margin-left: 20px;">
-				<input type='button' value='-' class='qtyminus' field='quantity' />
-			    <input type='text' name='quantity' value='1' class='qty' id="slmon" />
-			    <input type='button' value='+' class='qtyplus' field='quantity' />
+					</select>
+					<select name="mon" id="mon">
+
+					</select>
+					<!-- <input type="text" placeholder="Nhập số lượng..." id="slmon"> -->
+					<div class="quantity">
+						<input type="button" value='-' class='qtyminus' field='quantity' />
+					    <input type='text' name='quantity' value='1' class='qty' id="slmon" />
+					    <input type='button' value='+' class='qtyplus' field='quantity' />
+					</div>
 				</div>
-				
 				<button id="btndatmon">Đặt món</button>
 			</div>
 		</div>
@@ -94,14 +98,4 @@
 	</div>
 </body>
 </html>
-
-<style type="text/css" media="screen">
-	.qty {
-    width: 40px;
-    height: 30px;
-    text-align: center;
-    font-size: 25px;
-}
-input.qtyplus { width:60px; height:40px; font-size: 25px;}
-input.qtyminus { width:60px; height:40px;font-size: 25px}
 </style>

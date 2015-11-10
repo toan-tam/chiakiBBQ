@@ -2,7 +2,7 @@
 function tableState(tablenum){
     var lastCL = '#f6f6f6';
     $.ajax({                                 // Gets data from server to reload color of Table
-        url      : 'connect.php?getColor',
+        url      : 'connect.php?act=getColor',
         type     : 'get',
         dataType : 'json',
         async    : false,                   // to dispatch value to the ajax function
@@ -35,7 +35,7 @@ function timer(IdDatMon){
 
 function getColor(){
     $.ajax({
-        url         : 'connect.php?getColor',
+        url         : 'connect.php?act=getColor',
         type        : 'GET',
         async       : false,
         dataType    : 'json',
@@ -43,13 +43,20 @@ function getColor(){
         success: function(result){
             $.each(result,function(key, item){
                 $('#'+item['TenBan']+'').css('background',item['Mau']);
-                if(item['LamMoi'] == 1 && item['TenBan'] == $('.ChonBan').attr('id')){
+                if(item['Mau']=='red')
+                    $('#'+item['TenBan']+' .img_display').css('display','initial');
+                else
+                    $('#'+item['TenBan']+' .img_display').css('display','none');
+
+                if((item['LamMoi'] == 1) && item['TenBan'] == $('.ChonBan').attr('id')){
                     $('.ChonBan').trigger('click');
                     $.ajax({
-                        url     : 'update.php?resetLamMoi',
+                        url     : 'update.php?act=resetClick',
                         type    : 'POST',
                         async   : false,
                         data    : {
+                            click   : item['LamMoi'],
+                            mode    : 1,
                             tenban  : item['TenBan']
                         },
                         success: function(){
@@ -60,33 +67,16 @@ function getColor(){
             });
         }
     });
-    setTimeout(getColor,3000);  // update time every 1s
+    setTimeout(getColor,1000);  // update time every 1s
 }
-
-function canhbao(tinnhan){
-    $('#thongbao').dialog({
-        modal   : true,
-        title   : 'Chú ý!',
-        open    : function(){
-            $(this).html(tinnhan);
-        },
-        buttons : {
-            'Đóng' : function(){
-                $('#thongbao').dialog('close');
-            }
-        }
-    }).css('font','20px Arial');
-}
-
 
 
 $( document ).ready(function() {                            //Specifies the function to run after the document is loaded
-   
+    $('.nutbam').append('<img src="images/arrow-up.png" class="img_display" style="display:none;">');
     getColor();
     var lastId = 0, currentId = 0, lastColor = "#f6f6f6";
-    var xacnhan = false;
     $('.nutbam').click(function () {                       // Event onclick for every "nutbam" class
-        var tenban = $(this).html();                       // Gets HTML from button clicked
+        var tenban = $(this).html().split('<img')[0];                       // Gets HTML from button clicked   
         $('table#menu-order').css('display','');
         
         $('.ChonBan').removeClass("ChonBan");
@@ -100,7 +90,7 @@ $( document ).ready(function() {                            //Specifies the func
         $('table#menu-order').html(tieude);
         
         $.ajax({                                           // Get data to check the food lines in each Table
-            url      : 'connect.php?getOrderList',
+            url      : 'connect.php',
             type     : 'get',
             async    : false,
             dataType : 'json',
@@ -153,41 +143,33 @@ $( document ).ready(function() {                            //Specifies the func
                             
 
                         btn_danhan.click(function(){                          // Displays state and color of food line and Table
-                            xacnhan = false;
                             if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
-                                canhbao('Món này đã được bếp nhận!');
-                            } else{
-                                var ct='Xác nhận Bếp nhận món: '+item['TenMon']+', số lượng: '+item['SoLuong']+'?';
-                                $('#content2').html(ct);
-                                $("#cfbtn").click(function(){
-                                    if(!xacnhan){
-                                        btn_danhan.css("backgroundColor", "green");
-                                        var tr = btn_danhan.closest('tr');
-                                        var idDM = tr.attr('id-order');        // Get the IdDatMon of datmon Table
-                                        $("table#menu-order tr[id-order='" + idDM + "'] a.dagui").css("backgroundColor", "#f6f6f6");
-                                        $("table#menu-order tr[id-order='" + idDM + "'] a.huy").css("backgroundColor", "#f6f6f6");
-                                        $.ajax({
-                                            type    : 'POST',
-                                            url     : 'update.php?update=danhan',
-                                            async   : false,
-                                            success : function(data){
-                                                lastColor = tableState(item['TenBan']);     // Updates color of Table after clicking on food lines
-                                            },
-                                            data    : {
-                                                ten_ban    : tenban,
-                                                trangthai : 1,
-                                                ID_DatMon    : idDM              // Retrieves IdDatMon to update State of food lines
-                                            }
-                                        }); 
-                                    xacnhan = true;  
+                                alert('Món này đã được bếp nhận!');
+                            } else if(confirm('Xác nhận Bếp nhận món: '+item['TenMon']+', số lượng: '+item['SoLuong']+'?')){
+                                $(this).css("backgroundColor", "green");
+                                var tr = $(this).closest('tr');
+                                var idDM = tr.attr('id-order');        // Get the IdDatMon of datmon Table
+                                $("table#menu-order tr[id-order='" + idDM + "'] a.dagui").css("backgroundColor", "#f6f6f6");
+                                $("table#menu-order tr[id-order='" + idDM + "'] a.huy").css("backgroundColor", "#f6f6f6");
+                                $.ajax({
+                                    type    : 'POST',
+                                    url     : 'update.php?update=danhan',
+                                    async   : false,
+                                    success : function(data){
+                                        lastColor = tableState(item['TenBan']);     // Updates color of Table after clicking on food lines
+                                    },
+                                    data    : {
+                                        ten_ban    : tenban,
+                                        trangthai : 1,
+                                        ID_DatMon    : idDM              // Retrieves IdDatMon to update State of food lines
                                     }
-                                });
+                                });   
                             }
                         });
 
                         btn_dagui.click(function(){
                             if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
-                                canhbao('Món này đã được bếp gửi!');
+                                alert('Món này đã được bếp gửi!');
                             } else if(confirm('Xác nhận Bếp gửi món?')){
                                 $(this).css("backgroundColor", "green");
                                 var tr = $(this).closest('tr');
@@ -213,9 +195,9 @@ $( document ).ready(function() {                            //Specifies the func
 
                         btn_huy.click(function(){                   //Case : update data when click on diffirent state of food lines
                             if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
-                                canhbao('Món này đã được bếp hủy!');
+                                alert('Món này đã được bếp hủy!');
                             } else if(item['TrangThai']=='4'){
-                                canhbao('Khách đã nhận món, không thể hủy!');
+                                alert('Khách đã nhận món, không thể hủy!');
                             } else if(confirm('Xác nhận Bếp hủy món?')){
                                 $(this).css("backgroundColor", "green");
                                 var tr = $(this).closest('tr');
@@ -251,5 +233,4 @@ $( document ).ready(function() {                            //Specifies the func
         }
     
     });
-
 });

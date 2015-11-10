@@ -51,14 +51,10 @@ function timer(IdDatMon){
     });
 }
 
-$(document).ready(function(){
-
-	chonTang('1'); //Hien thi ds ban o tang 1
-	
-	//Hien thi danh sach mon de datmon
+function getdsmon(IdLoaiMon){
 	$('.datmon #mon').html('');
 	$.ajax({
-		url		: 'connect.php?getDsMon',
+		url		: 'connect.php?getDsMon&IdLoaiMon='+IdLoaiMon,
 		type 	: 'GET',
 		async	: false,
 		dataType: 'json',
@@ -69,6 +65,33 @@ $(document).ready(function(){
 			});
 		}
 	});
+}
+
+$(document).ready(function(){
+
+	chonTang('1'); //Hien thi ds ban o tang 1
+	
+	//Hien thi danh sach loai mon
+	$('.datmon #loaimon').html('');
+	$.ajax({
+		url		: 'connect.php?getLoaiMon',
+		type 	: 'GET',
+		async	: false,
+		dataType: 'json',
+		success	: function(data){
+			$.each(data,function(key,item){
+				var option = '<option id="'+item['IdLoaiMon']+'" value="'+item['IdLoaiMon']+'">'+item['TenLoaiMon']+'</option>';
+				$('.datmon #loaimon').append(option);
+			});
+		}
+	});
+
+	getdsmon($('#loaimon').val());
+
+	$('#loaimon').change(function(){
+		getdsmon($(this).val());
+	});
+
 	//Thay doi danh sach ban khi chon tang khac
 	$('#chonTang').change(function(){
 		var tang = $(this).val();
@@ -233,14 +256,11 @@ $(document).ready(function(){
 	
 	//Dat mon
 	$('#btndatmon').click(function(){
-		var idmon = $('#mon').val();
+		var idmon = $('#mon option:selected').val();
+		console.log($('#mon'));
 		var slmon = $('#slmon').val();
-		r =/^\d+$/;
-		if (isNaN(idmon) || idmon == '' || r.test($('#CombifyInput-mon').val())) {
-			$('#CombifyInput-mon').focus();
-			canhbao('Tên món không hợp lệ!');
-		}
-		else if(isNaN(slmon) || slmon == ''){
+
+		if(isNaN(slmon) || slmon == ''){
 			$('#slmon').focus();
 			$('#slmon').select();
 			canhbao('Số lượng món đã nhập không phải là số, vui lòng nhập lại!');
@@ -249,7 +269,7 @@ $(document).ready(function(){
 				modal	: true,
 				title	: 'Xác nhận đặt món!',
 				open	: function(){
-					var tenmon = $('option#'+idmon+'').text();
+					var tenmon = $('#mon option:selected').text();
 					var tinnhan = 'Xác nhận đặt món:<br><strong class="red">'+tenmon+'</strong>, số lượng: <strong class="red">'+slmon+'</strong>';
 					$(this).html(tinnhan);
 				},
@@ -268,7 +288,7 @@ $(document).ready(function(){
 								$('#'+tenban+'').trigger('click');
 							}
 						});
-						$('#slmon').val('');
+						$('#slmon').val('1');
 						$('#thongbao').dialog('close');
 					},
 					'Hủy' : function(){
