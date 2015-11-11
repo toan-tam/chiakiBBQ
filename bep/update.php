@@ -52,6 +52,16 @@
                 WHERE IdDatMon = '{$_REQUEST['ID_DatMon']}'";
         mysqli_query($conn,$sql);
 
+        $sql = "SELECT * FROM DatMon
+                WHERE TenBan = '{$table}' AND TraBan = 0 AND TrangThai IN (0,1)";
+        $result = mysqli_query($conn,$sql);
+        if(mysqli_num_rows($result)==0){
+            $sql = "UPDATE dsban
+                    SET Mau = 'yellow'
+                    WHERE tenban = '{$_REQUEST['tenBan']}'";
+            mysqli_query($conn,$sql);
+        }
+        
         $sql = "UPDATE dsban
                 SET LamMoi = 2
                 WHERE tenban = '{$_REQUEST['tenBan']}'";

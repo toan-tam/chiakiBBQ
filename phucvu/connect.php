@@ -92,6 +92,19 @@
 		$result = mysqli_query($conn, $sql);
 		if(mysqli_num_rows($result)>0){
 			while($row = mysqli_fetch_assoc($result)){
+				$row['IdDatMon'] = '';
+				$row['TrangThai'] = '';
+				$row['DaXem'] = 1;
+				$row['TenMon'] = '';
+				$data[] = $row;
+			}
+		}
+		$sql = "SELECT IdDatMon, TrangThai, TenBan, DaXem, mon.TenMon
+				FROM datmon LEFT JOIN mon
+				ON datmon.IdMon = mon.Id";
+		$result = mysqli_query($conn, $sql);
+		if(mysqli_num_rows($result)>0){
+			while($row = mysqli_fetch_assoc($result)){
 				$data[] = $row;
 			}
 		}
