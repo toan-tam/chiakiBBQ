@@ -38,7 +38,7 @@
 
             $row = mysqli_fetch_assoc($result);
 
-            if($row['TGKhachNhan']==$row['TGKhachDat']){
+            if($row['TGKhachNhan']==''){
 
                 date_default_timezone_set("Asia/Ho_Chi_Minh");    
                 $row['TGKhachNhan'] = date("Y-m-d H:i:s");
@@ -68,7 +68,7 @@
 	if(isset($_REQUEST['tenban'])){
 		$data = array();
 		$sql = "SELECT * FROM
-					(SELECT IdDatMon, IdMon, TenBan, TenMon, SoLuong, TGKhachNhan, TGKhachDat, TrangThai, TraBan
+					(SELECT IdDatMon, IdMon, TenBan, TenMon, TGKhachDat, SoLuong, TrangThai, TraBan
 						FROM DatMon, Mon 
                     	WHERE TenBan = '{$_REQUEST['tenban']}' AND DatMon.IdMon = Mon.Id AND TraBan=0) As T1
                 LEFT JOIN (SELECT TenMon AS TenMon2, Sum(SoLuong) AS Tong
