@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50626
 File Encoding         : 65001
 
-Date: 2015-11-10 08:34:58
+Date: 2015-11-11 15:13:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,15 +25,16 @@ CREATE TABLE `datmon` (
   `TenBan` varchar(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `SoLuong` int(3) DEFAULT NULL,
   `TrangThai` int(1) DEFAULT '0',
-  `TGKhachDat` datetime DEFAULT CURRENT_TIMESTAMP,
-  `TGKhachNhan` datetime DEFAULT CURRENT_TIMESTAMP,
+  `TGKhachDat` timestamp DEFAULT CURRENT_TIMESTAMP,
+  `TGKhachNhan` varchar(50) DEFAULT '',
   `TraBan` tinyint(1) DEFAULT '0',
+  `DaXem` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`IdDatMon`),
   KEY `datmon_mon_1` (`IdMon`),
   KEY `datmon_dsban_1` (`TenBan`),
   CONSTRAINT `datmon_dsban_1` FOREIGN KEY (`TenBan`) REFERENCES `dsban` (`TenBan`),
   CONSTRAINT `datmon_mon_1` FOREIGN KEY (`IdMon`) REFERENCES `mon` (`Id`)
-) ENGINE=InnoDB AUTO_INCREMENT=122 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of datmon

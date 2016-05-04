@@ -131,7 +131,10 @@ $(document).ready(function(){
 							$('.invisible table.mon .tinhtrang').css({'background': '','color': '', 'font-weight': ''});
 							break;
 						case '7':
-						case '1': 
+							tinhtrang = 'Bếp đã nhận, từ chối hủy';
+							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
+							break;
+						case '1':
 							tinhtrang = 'Bếp đã nhận';
 							$('.invisible table.mon .tinhtrang').css({'background': 'red','color': '#FFF', 'font-weight': 'bold'});
 							break;
@@ -174,13 +177,14 @@ $(document).ready(function(){
                     var btn_huy = $("table#dsmon tr[id-order='" + item['IdDatMon'] + "'] .khachhuy");
                     
                     btn_danhan.click(function(){
+                    	console.log(item['TrangThai']);
                         if(item['TrangThai']=='0'){
                             canhbao('Đang gửi lên bếp, không thể nhận!');
-                        } else if(item['TrangThai']=='1'){
+                        } else if(item['TrangThai']=='1' || item['TrangThai'] == '5' || item['TrangThai'] == '7'){
                             canhbao('Bếp chưa gửi xuống, không thể nhận!');
-                        } else if(item['TrangThai']=='3'){
+                        } else if(item['TrangThai']=='3' || item['TrangThai'] == '6'){
                             canhbao('Bếp đã hủy món, không thể nhận!');
-                        } else if(item['TrangThai'] == '4'){
+                        } else if(item['TrangThai'] == '5'){
                             canhbao('Đã nhận món!');
                         } else {
                             $('#thongbao').dialog({
@@ -217,8 +221,10 @@ $(document).ready(function(){
                     btn_huy.click(function(){                   //Case : update data when click on diffirent state of food lines
                     	if(item['TrangThai']=='5'){
                     		canhbao('Chờ phản hồi từ bếp!');
-                    	} else if(item['TrangThai']=='4'){
-                            canhbao('Đã nhận món, không thể hủy');
+                    	} else if(item['TrangThai']=='2'){
+                            canhbao('Bếp đã gửi xuống, không thể hủy!');
+                        } else if(item['TrangThai']=='7'){
+                            canhbao('Bếp không đồng ý hủy!');
                         } else if(item['TrangThai']=='2'){
                             canhbao('Bếp đã gửi xuống, không thể hủy!');
                         } else if(item['TrangThai']=='1'){
@@ -406,6 +412,56 @@ $(document).ready(function(){
                                 //Do nothing
                             }
                         });
+                    }
+                    if(item['TrangThai']=='6' && item['DaXem']==0){
+						$('#thongbao').dialog({
+							modal	: true,
+							title	: 'Chú ý!',
+							open	: function(){
+								$(this).html('Bếp đã đồng ý hủy món <b style="color:red">'+item['TenMon']+'</b> ở bàn <b style="color:red">'+item['TenBan']+'</b>');
+							},
+							buttons	: {
+								'Đóng' : function(){
+									$.ajax({
+										url		: 'update.php?daxem',
+										type 	: 'POST',
+										async	: false,
+										data 	: {
+											id_datmon : item['IdDatMon']
+										},
+										success	: function(){
+											//Do nothing
+										}
+									});
+									$('#thongbao').dialog('close');
+								}
+							}
+						}).css('font','20px Arial');
+                    }
+                    if(item['TrangThai']=='7' && item['DaXem']==0){
+						$('#thongbao').dialog({
+							modal	: true,
+							title	: 'Chú ý!',
+							open	: function(){
+								$(this).html('Bếp không đồng ý hủy món <b style="color:red">'+item['TenMon']+'</b> ở bàn <b style="color:red">'+item['TenBan']+'</b>');
+							},
+							buttons	: {
+								'Đóng' : function(){
+									$.ajax({
+										url		: 'update.php?daxem',
+										type 	: 'POST',
+										async	: false,
+										data 	: {
+											id_datmon : item['IdDatMon']
+										},
+										success	: function(){
+											//Do nothing
+										}
+									});
+									$('#thongbao').dialog('close');
+								}
+							}
+						}).css('font','20px Arial');
                     }
                 });
             }

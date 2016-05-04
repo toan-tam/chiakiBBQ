@@ -35,18 +35,13 @@
 					WHERE IdDatMon='{$_REQUEST['idDMon']}'";
 			mysqli_query($conn,$sql);
 		} else {
-	        //delete the record
-	        $sql = "DELETE FROM DatMon
-	                WHERE IdDatMon='{$_REQUEST['idDMon']}'";
-        	mysqli_query($conn,$sql);
-
 			$sql = "SELECT IdDatMon FROM DatMon
 					WHERE TenBan = '{$_REQUEST['tenBan']}'
 					AND TraBan = 0";
 			$rs = mysqli_query($conn,$sql);
 			$red = false;
 			$color = '#f6f6f6';
-			if(mysqli_num_rows($rs) > 0){
+			if(mysqli_num_rows($rs) > 1){
 				while($row = mysqli_fetch_assoc($rs)){
 					if($row['TrangThai'] == 0 || $row['TrangThai'] == 1){
 						$red = true;
@@ -66,6 +61,11 @@
 	        		SET LamMoi = 1
 	        		WHERE TenBan IN (SELECT TenBan FROM DatMon WHERE IdMon = {$_REQUEST['idMon']})";
 	        mysqli_query($conn,$sql);
+
+	        //delete the record
+	        $sql = "DELETE FROM DatMon
+	                WHERE IdDatMon='{$_REQUEST['idDMon']}'";
+        	mysqli_query($conn,$sql);
 		}
 	}
 
@@ -94,4 +94,12 @@
                 WHERE TenBan = '{$_REQUEST['tenBan']}'";
         mysqli_query($conn,$sql);
 	}
+
+	if(isset($_REQUEST['daxem'])){
+		$sql = "UPDATE datmon
+				SET DaXem = 1
+				WHERE IdDatMon = '{$_REQUEST['id_datmon']}'";
+		mysqli_query($conn,$sql);
+	}
+
 ?>

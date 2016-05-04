@@ -65,6 +65,9 @@ function getColor(count){
                         });
                     }
                 } else if(item['data'] == 'lstCancel' && result['cancel'] != count){
+                    if(item['TenBan'] == $('.ChonBan').attr('id')){
+                        $('.ChonBan').trigger('click');
+                    }
                     var data = '<li><a href="#" id="'+item['IdDatMon']+'">'+item['TenBan']+': '+item['TenMon']+'</a></li>';
                     $('.notice ul').append(data);
                 }
@@ -127,6 +130,7 @@ $( document ).ready(function() {                            //Specifies the func
                         switch (item['TrangThai']){                                         // Display the color of state of food lines!
                                 case '1':                                                   // when clicking on Table
                                 case '5':
+                                case '7':
                                     btn_danhan.css("backgroundColor", "green");
                                     btn_dagui.css("backgroundColor", "#f6f6f6");
                                     btn_huy.css("backgroundColor", "#f6f6f6");
@@ -140,6 +144,7 @@ $( document ).ready(function() {                            //Specifies the func
                                     break;
 
                                 case '3':
+                                case '6':
                                     btn_danhan.css("backgroundColor", "#f6f6f6");
                                     btn_dagui.css("backgroundColor", "#f6f6f6");
                                     btn_huy.css("backgroundColor", "green");
@@ -150,8 +155,16 @@ $( document ).ready(function() {                            //Specifies the func
                             
 
                         btn_danhan.click(function(){                          // Displays state and color of food line and Table
-                            if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
+                            if(item['TrangThai']=='1' || item['TrangThai']=='7'){
                                 alert('Món này đã được bếp nhận!');
+                            } else if(item['TrangThai']=='2'){
+                                alert('Món này đã được bếp gửi đi!');
+                            } else if(item['TrangThai']=='3' || item['TrangThai']=='6'){
+                                alert('Món này đã bị bếp hủy!');
+                            } else if(item['TrangThai']=='5'){
+                                alert('Món này đang chờ phản hồi yêu cầu hủy!');
+                            } else if(item['TrangThai']=='4'){
+                                alert('Khách đã nhận món!');
                             } else if(confirm('Xác nhận Bếp nhận món: '+item['TenMon']+', số lượng: '+item['SoLuong']+'?')){
                                 $(this).css("backgroundColor", "green");
                                 var tr = $(this).closest('tr');
@@ -163,6 +176,7 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=danhan',
                                     async   : false,
                                     success : function(data){
+                                        $('.ChonBan').trigger('click');
                                         lastColor = tableState(item['TenBan']);     // Updates color of Table after clicking on food lines
                                     },
                                     data    : {
@@ -175,8 +189,14 @@ $( document ).ready(function() {                            //Specifies the func
                         });
 
                         btn_dagui.click(function(){
-                            if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
+                            if(item['TrangThai']=='2'){
                                 alert('Món này đã được bếp gửi!');
+                            } else if(item['TrangThai']=='3' || item['TrangThai']=='6'){
+                                alert('Món này đã bị bếp hủy!');
+                            } else if(item['TrangThai']=='5'){
+                                alert('Món này đang chờ phản hồi yêu cầu hủy!');
+                            } else if(item['TrangThai']=='4'){
+                                alert('Khách đã nhận món!');
                             } else if(confirm('Xác nhận Bếp gửi món?')){
                                 $(this).css("backgroundColor", "green");
                                 var tr = $(this).closest('tr');
@@ -189,7 +209,8 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dagui',
                                     async   : false,
                                     success : function(data){
-                                          lastColor = tableState(item['TenBan']);
+                                        $('.ChonBan').trigger('click');
+                                        lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {
                                         ten_ban    : tenban,
@@ -201,10 +222,14 @@ $( document ).ready(function() {                            //Specifies the func
                         });
 
                         btn_huy.click(function(){                   //Case : update data when click on diffirent state of food lines
-                            if($(this).css('backgroundColor')=='rgb(0, 128, 0)'){
-                                alert('Món này đã được bếp hủy!');
+                            if(item['TrangThai']=='2'){
+                                alert('Món này đã được bếp gửi, không thể hủy!');
+                            } else if(item['TrangThai']=='3' || item['TrangThai']=='6'){
+                                alert('Món này đã bị bếp hủy!');
+                            } else if(item['TrangThai']=='5'){
+                                alert('Món này đang chờ phản hồi yêu cầu hủy!');
                             } else if(item['TrangThai']=='4'){
-                                alert('Khách đã nhận món, không thể hủy!');
+                                alert('Khách đã nhận món!');
                             } else if(confirm('Xác nhận Bếp hủy món?')){
                                 $(this).css("backgroundColor", "green");
                                 var tr = $(this).closest('tr');
@@ -217,6 +242,7 @@ $( document ).ready(function() {                            //Specifies the func
                                     url     : 'update.php?update=dahuy',
                                     async   : false,
                                     success : function(data){
+                                        $('.ChonBan').trigger('click');
                                         lastColor = tableState(item['TenBan']);
                                     },
                                     data    : {
@@ -242,6 +268,7 @@ $( document ).ready(function() {                            //Specifies the func
     });
 
     $('.notice').on('click','a',function(){
+        var ten_ban = $(this).html().split(':')[0];
         if(confirm('Cho hủy món này nha anh bếp đẹp dzai <3 <3')){
             $.ajax({
                 type    : 'POST',
@@ -251,7 +278,7 @@ $( document ).ready(function() {                            //Specifies the func
                     alert('Cảm ưn anh đẹp dzai!!');
                 },
                 data    : {
-                    tenBan : $(this).html().split(':')[0],
+                    tenBan : ten_ban,
                     ID_DatMon: $(this).attr('id')
                 }
             });  
@@ -264,10 +291,13 @@ $( document ).ready(function() {                            //Specifies the func
                     alert('Người đâu mà khó tính -_-');
                 },
                 data    : {
-                    tenBan : $(this).html().split(':')[0],
+                    tenBan : ten_ban,
                     ID_DatMon: $(this).attr('id')
                 }
             });
+        }
+        if(ten_ban == $('.ChonBan').attr('id')){
+            $('.ChonBan').trigger('click');
         }
     });
 

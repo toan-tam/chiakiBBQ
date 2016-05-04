@@ -38,7 +38,7 @@
 
             $row = mysqli_fetch_assoc($result);
 
-            if($row['TGKhachNhan']==$row['TGKhachDat']){
+            if($row['TGKhachNhan']==''){
 
                 date_default_timezone_set("Asia/Ho_Chi_Minh");    
                 $row['TGKhachNhan'] = date("Y-m-d H:i:s");
@@ -68,7 +68,7 @@
 	if(isset($_REQUEST['tenban'])){
 		$data = array();
 		$sql = "SELECT * FROM
-					(SELECT IdDatMon, IdMon, TenBan, TenMon, SoLuong, TGKhachNhan, TGKhachDat, TrangThai, TraBan
+					(SELECT IdDatMon, IdMon, TenBan, TenMon, TGKhachDat, SoLuong, TrangThai, TraBan
 						FROM DatMon, Mon 
                     	WHERE TenBan = '{$_REQUEST['tenban']}' AND DatMon.IdMon = Mon.Id AND TraBan=0) As T1
                 LEFT JOIN (SELECT TenMon AS TenMon2, Sum(SoLuong) AS Tong
@@ -89,6 +89,19 @@
 	if(isset($_REQUEST['refresh'])){
 		$data = array();
 		$sql = "SELECT * FROM dsBan";
+		$result = mysqli_query($conn, $sql);
+		if(mysqli_num_rows($result)>0){
+			while($row = mysqli_fetch_assoc($result)){
+				$row['IdDatMon'] = '';
+				$row['TrangThai'] = '';
+				$row['DaXem'] = 1;
+				$row['TenMon'] = '';
+				$data[] = $row;
+			}
+		}
+		$sql = "SELECT IdDatMon, TrangThai, TenBan, DaXem, mon.TenMon
+				FROM datmon LEFT JOIN mon
+				ON datmon.IdMon = mon.Id";
 		$result = mysqli_query($conn, $sql);
 		if(mysqli_num_rows($result)>0){
 			while($row = mysqli_fetch_assoc($result)){
